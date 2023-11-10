@@ -24,7 +24,6 @@ module.exports.updateProfile = CatchAsync(async (req, res, next) => {
   if (!req.params.id) return next(new AppError("No user ID", 400));
 
   const profile = await Profile.findById(req.params.id);
-  console.log("working", profile);
   if (!profile) return next(new AppError("No user found", 404));
 
   if (profile) {
