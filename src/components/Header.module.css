@@ -1,0 +1,34 @@
+.sideNavbar {
+  background-image: linear-gradient(to top right, rgb(238, 185, 124), rgb(244, 49, 0));
+  display: flex;
+  align-items: middle;
+  justify-content: space-between;
+  height: 100px;
+}
+.middleLeft {
+    position: relative;
+  margin-top: auto;
+  margin-bottom: auto;
+  /* width: 50px;
+  height: 50px;
+  background-color: white;
+  border-radius: 50px; */
+}
+
+.photo {
+  width: 220px; /* Adjust the width as needed */
+  height: 100px; /* Adjust the height as needed */
+  border-radius: 50%; /* Make it circular */
+}
+
+.rightBottom {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+}
+
+.link {
+  margin-top: 8px; /* Adjust the spacing between links */
+  text-decoration: none;
+  color: #333; /* Adjust the color as needed */
+}
