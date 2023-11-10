@@ -4,7 +4,7 @@ const CatchAsync = require("../utils/CatchAsync");
 
 // get current user profile
 module.exports.getUserProfile = CatchAsync(async (req, res, next) => {
-  if (req.params.id) return next(new AppError("No user ID", 400));
+  if (!req.params.id) return next(new AppError("No user ID", 400));
 
   const data = Profile.findById(req.params.id);
   if (!data) return next(new AppError("No user found", 404));
@@ -16,7 +16,7 @@ module.exports.getUserProfile = CatchAsync(async (req, res, next) => {
 
 // update current user profile
 module.exports.updateProfile = CatchAsync(async (req, res, next) => {
-  if (req.params.id) return next(new AppError("No user ID", 400));
+  if (!req.params.id) return next(new AppError("No user ID", 400));
 
   const profile = await Profile.findById(req.params.id);
   if (!profile) return next(new AppError("No user found", 404));
@@ -74,12 +74,14 @@ module.exports.updateProfile = CatchAsync(async (req, res, next) => {
 
 // controller for update user current location
 module.exports.updateProfileLocation = CatchAsync(async (req, res, next) => {
-  if (req.params.id) return next(new AppError("No user ID", 400));
+  if (!req.params.id) return next(new AppError("No user ID", 400));
 
   const profile = await Profile.findById(req.params.id);
   if (!profile) return next(new AppError("No user found", 404));
 
   profile.location.coordinates = req.body.coordinates;
+  await profile.save();
+
   res.status(200).json({
     message: "updated",
   });
@@ -92,7 +94,6 @@ module.exports.similarInterestPeople = CatchAsync(async (req, res, next) => {
     sexual_orientation: req.user?.sexual_orientation,
     gender: { $ne: req.user?.gender },
   });
-  console.log(allUsers);
   const similarUsers = allUsers.filter((user) => {
     if (req.user.profile_id !== user._id) {
       // Calculate the number of shared interests between the current user and the target user
@@ -114,13 +115,13 @@ module.exports.similarInterestPeople = CatchAsync(async (req, res, next) => {
 
 // controller to get near users
 module.exports.getUsersNear = CatchAsync(async (req, res, next) => {
-  const currentUser = await Profile.findById(req.user.profile_id);
+  const currentUser = await Profile.findById(req.user._id);
   const users = await Profile.find({
-    "location.coordinates": {
+    location: {
       $near: {
         $geometry: {
           type: "Point",
-          coordinates: currentUser.location.coordinates,
+          coordinates: currentUser?.location?.coordinates,
         },
         $maxDistance: 10000,
       },

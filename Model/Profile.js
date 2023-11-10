@@ -28,6 +28,9 @@ const schema = new mongoose.Schema(
   { versionKey: false, timestamps: true }
 );
 
+// indexing geo location
+schema.index({ location: "2dsphere" });
+
 // Middleware: Pre-save hook to create user
 schema.pre("save", async function (next) {
   try {
