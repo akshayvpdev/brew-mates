@@ -9,8 +9,11 @@ module.exports.getUserProfile = CatchAsync(async (req, res, next) => {
 
   const user = await User.findById(req.params.id);
 
-  const data = await Profile.findById(user.profile_id);
-  console.log(data);
+  const data = await Profile.findById(user.profile_id).populate([
+    { path: "requested_ids" },
+    { path: "accepted_ids" },
+  ]);
+
   if (!data) return next(new AppError("No user found", 404));
   res.status(200).json({
     data,

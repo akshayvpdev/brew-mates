@@ -13,8 +13,8 @@ const schema = new mongoose.Schema(
     interest: [String],
     sexual_orientation: { type: String, enum: Object.keys(sexualOrientation) },
     images: [String],
-    requested_ids: { type: mongoose.Types.ObjectId, ref: "profiles" },
-    accepted_ids: { type: mongoose.Types.ObjectId, ref: "profiles" },
+    requested_ids: [{ type: mongoose.Types.ObjectId, ref: "profiles" }],
+    accepted_ids: [{ type: mongoose.Types.ObjectId, ref: "profiles" }],
     location: {
       type: {
         type: String,
