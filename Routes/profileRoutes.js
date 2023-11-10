@@ -17,9 +17,11 @@ router.patch("/updateLocation/:id?", profileController.updateProfileLocation);
 //get user near
 router.get("/nearMe", authController.protect, profileController.getUsersNear);
 
-//get and update user profile
-router
-  .get("/:id?", profileController.getUserProfile)
-  .patch(profileController.updateProfile);
+//update user profile
+
+router.patch("/updateUser/:id?", profileController.updateProfile);
+
+//get user profile
+router.get("/:id?", profileController.getUserProfile);
 
 module.exports = router;
