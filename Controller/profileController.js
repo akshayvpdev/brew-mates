@@ -1,4 +1,5 @@
 const Profile = require("../Model/Profile");
+const User = require("../Model/User");
 const AppError = require("../utils/AppError");
 const CatchAsync = require("../utils/CatchAsync");
 
@@ -6,7 +7,9 @@ const CatchAsync = require("../utils/CatchAsync");
 module.exports.getUserProfile = CatchAsync(async (req, res, next) => {
   if (!req.params.id) return next(new AppError("No user ID", 400));
 
-  const data = Profile.findById(req.params.id);
+  const user = await User.findById(req.params.id);
+
+  const data = Profile.findById(user.profile_id);
   if (!data) return next(new AppError("No user found", 404));
   res.status(200).json({
     data,
@@ -18,7 +21,9 @@ module.exports.getUserProfile = CatchAsync(async (req, res, next) => {
 module.exports.updateProfile = CatchAsync(async (req, res, next) => {
   if (!req.params.id) return next(new AppError("No user ID", 400));
 
-  const profile = await Profile.findById(req.params.id);
+  const user = await User.findById(req.params.id);
+
+  const profile = await Profile.findById(user.profile_id);
   if (!profile) return next(new AppError("No user found", 404));
 
   if (profile) {
@@ -76,7 +81,9 @@ module.exports.updateProfile = CatchAsync(async (req, res, next) => {
 module.exports.updateProfileLocation = CatchAsync(async (req, res, next) => {
   if (!req.params.id) return next(new AppError("No user ID", 400));
 
-  const profile = await Profile.findById(req.params.id);
+  const user = await User.findById(req.params.id);
+
+  const profile = await Profile.findById(user.profile_id);
   if (!profile) return next(new AppError("No user found", 404));
 
   profile.location.coordinates = req.body.coordinates;
