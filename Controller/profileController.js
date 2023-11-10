@@ -9,7 +9,8 @@ module.exports.getUserProfile = CatchAsync(async (req, res, next) => {
 
   const user = await User.findById(req.params.id);
 
-  const data = Profile.findById(user.profile_id);
+  const data = await Profile.findById(user.profile_id);
+  console.log(data);
   if (!data) return next(new AppError("No user found", 404));
   res.status(200).json({
     data,
